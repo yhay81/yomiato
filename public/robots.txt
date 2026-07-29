@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /d/
+Disallow: /manage/
+Disallow: /api/
+
+Sitemap: https://yomiato.yhay81.com/sitemap.xml
