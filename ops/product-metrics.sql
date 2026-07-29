@@ -1,0 +1,21 @@
+SELECT
+  COUNT(DISTINCT CASE WHEN name = 'visited' THEN session_id END) AS users,
+  COUNT(DISTINCT CASE WHEN name = 'draft_created' THEN session_id END) AS creators,
+  COUNT(DISTINCT CASE WHEN name = 'draft_created' THEN draft_id END) AS drafts_created,
+  COUNT(DISTINCT CASE WHEN name = 'draft_shared' THEN session_id END) AS sharers,
+  COUNT(DISTINCT CASE WHEN name = 'draft_viewed' THEN session_id END) AS readers,
+  COUNT(DISTINCT CASE WHEN name = 'reaction_left' THEN session_id END) AS reactors,
+  COUNT(DISTINCT CASE WHEN name = 'feedback_submitted' THEN session_id END) AS feedbackers,
+  COUNT(DISTINCT CASE WHEN name = 'feedback_submitted' THEN draft_id END) AS drafts_with_feedback,
+  COUNT(DISTINCT CASE WHEN name = 'owner_checked' THEN session_id END) AS owners_checked,
+  COUNT(DISTINCT CASE WHEN name = 'draft_closed' THEN draft_id END) AS closed_drafts,
+  COUNT(DISTINCT CASE WHEN name = 'returned' THEN session_id END) AS returned_users,
+  COUNT(DISTINCT CASE WHEN name = 'visited' AND occurred_on >= date('now', '-6 days') THEN session_id END) AS users_7d,
+  COUNT(DISTINCT CASE WHEN name = 'draft_created' AND occurred_on >= date('now', '-6 days') THEN session_id END) AS creators_7d,
+  COUNT(DISTINCT CASE WHEN name = 'feedback_submitted' AND occurred_on >= date('now', '-6 days') THEN session_id END) AS feedbackers_7d,
+  (SELECT COUNT(*) FROM drafts WHERE status = 'active' AND expires_at > unixepoch()) AS active_drafts,
+  (SELECT COUNT(*) FROM reactions) AS reactions,
+  (SELECT COUNT(*) FROM feedback) AS feedback_notes,
+  (SELECT COUNT(*) FROM reports) AS reports,
+  (SELECT COUNT(*) FROM drafts WHERE status = 'hidden') AS hidden_drafts
+FROM product_events;
